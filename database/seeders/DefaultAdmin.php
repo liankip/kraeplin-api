@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DefaultAdmin extends Seeder
@@ -13,12 +12,17 @@ class DefaultAdmin extends Seeder
      */
     public function run(): void
     {
-        User::create(
+        User::insert([
             [
+                'name' => 'admin',
                 'username' => 'admin',
                 'password' => bcrypt('password'),
-                'role' => 'admin',
+            ],
+            [
+                'name' => 'entry',
+                'username' => 'entry',
+                'password' => bcrypt('password'),
             ]
-        );
+        ]);
     }
 }

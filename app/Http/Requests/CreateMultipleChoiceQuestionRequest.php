@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateStudentRequest extends FormRequest
+class CreateMultipleChoiceQuestionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,14 @@ class CreateStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_group' => 'required|exists:groups,id',
-            'username' => 'required|string|unique:students,username|max:50',
-            'password' => 'required|string|min:6',
-            'nisn' => 'required|string|unique:students,nisn|max:11',
-            'name' => 'required|string|max:100',
+            'question' => 'required|string',
+            'option_a' => 'required|string',
+            'option_b' => 'required|string',
+            'option_c' => 'required|string',
+            'option_d' => 'required|string',
+            'option_e' => 'required|string',
+            'answer' => 'required|string',
+            'score' => 'required|integer',
         ];
     }
 

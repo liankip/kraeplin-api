@@ -18,7 +18,7 @@ class StudentSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             DB::table('students')->insert([
                 'id_group' => $faker->randomElement([1, 2, 3]),
                 'username' => $faker->unique()->userName,

@@ -30,6 +30,7 @@ class CreateStudentKraeplinTestRequest extends FormRequest
             'right_count' => 'required|integer',
             'false_count' => 'required|integer',
             'duration' => 'required|integer',
+            'status' => 'required|in:running,finished',
         ];
     }
 

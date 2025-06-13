@@ -3,16 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginStudentRequest extends FormRequest
+class UpdateStudentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -23,17 +22,7 @@ class LoginStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string',
-            'password' => 'required|string',
+            //
         ];
-    }
-
-    protected function failedValidation($validator): void
-    {
-        throw new HttpResponseException(
-            response()->api(false, 'Validation failed', [
-                'errors' => $validator->errors()
-            ], 200)
-        );
     }
 }

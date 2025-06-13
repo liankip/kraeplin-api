@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Student;
 use Faker\Factory as Faker;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class KraeplinSeeder extends Seeder
+class MultipleChoiceSeeder extends Seeder
 {
     /**
      * Run the database seeds.

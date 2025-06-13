@@ -4,18 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('kraeplins', function (Blueprint $table) {
+        Schema::create('multiple_choice_schedule_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->integer('duration');
-            $table->enum('status', ['active', 'inactive']);
-            $table->text('description');
+            $table->foreignId('id_group');
+            $table->foreignId('id_multiple_choice_schedule');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('kraeplins');
+        Schema::dropIfExists('multiple_choice_schedule_groups');
     }
 };

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',70);
-            $table->string('username', 50)->unique();
-            $table->string('password', 100);
-            $table->timestamps();
+        Schema::table('kraeplin_schedule_groups', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -25,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        //
     }
 };

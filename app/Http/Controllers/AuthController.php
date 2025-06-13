@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\CreateUserRequest;
+use App\Models\Student;
 use App\Models\User;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -13,25 +15,27 @@ class AuthController extends Controller
     {
         $user = User::where('username', $request['username'])->first();
 
-        if (!$user || !Hash::check($request['password'], $user->password)) {
-            return response()->api(false, 'Wrong credentials', [], 200);
+        if (!$user) {
+            $user = Student::where('username', $request['username'])->first();
         }
 
-        $token = $user->createToken('admin-token')->plainTextToken;
+        if (!$user || !Hash::check($request['password'], $user->password)) {
+            return new JsonResource(['message' => 'Wrong credentials']);
+        }
 
-        return response()->api(true, 'Login admin successful', [
-            'token' => $token,
-        ], 200);
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        return new JsonResource(['token' => $token]);
     }
 
-    public function registerUsers(RegisterRequest $request)
+    public function createUser(CreateUserRequest $request)
     {
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         $data['role'] = 'admin';
 
-        User::create($data);
+        $user = User::create($data);
 
-        return response()->api(true, 'Register admin successful', [], 201);
+        return new JsonResource($user);
     }
 }

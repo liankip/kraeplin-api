@@ -20,9 +20,8 @@ return new class extends Migration
             $table->integer('right_count');
             $table->integer('false_count');
             $table->integer('duration');
-            $table->enum('status', ['running', 'finished']);
+            $table->enum('status', ['pending', 'running', 'finished']);
             $table->timestamps();
-
             $table->unique(['id_student', 'id_kraeplin_schedule']);
         });
     }
