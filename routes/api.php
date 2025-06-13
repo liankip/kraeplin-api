@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AuthStudentController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KraeplinController;
 use App\Http\Controllers\MultipleChoiceController;
@@ -18,7 +17,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware(['auth:sanctum', 'role:admin|data-entry'])->group(function () {
             Route::prefix('student')->group(function () {
                 Route::get('/', [StudentController::class, 'collectionStudent'])->middleware('permission:view data')->name('student.collection');
-                Route::get('/{id}', [StudentController::class, 'documentStudent'])->middleware('permission:view data')->name('student.collection');
+                Route::get('/{id}', [StudentController::class, 'documentStudent'])->middleware('permission:view data')->name('student.document');
                 Route::post('/', [StudentController::class, 'createStudent'])->middleware('permission:create data')->name('student.group-create');
                 Route::put('/{id}', [StudentController::class, 'updateStudent'])->middleware('permission:edit data')->name('student.group-update');
                 Route::delete('/{id}', [StudentController::class, 'deleteStudent'])->middleware('permission:delete data')->name('student.group-delete');

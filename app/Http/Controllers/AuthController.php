@@ -7,17 +7,17 @@ use App\Http\Requests\CreateUserRequest;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
     public function loginUsers(LoginRequest $request)
     {
-        $user = User::where('username', $request['username'])->first();
-
-        if (!$user) {
-            $user = Student::where('username', $request['username'])->first();
-        }
+        $user = User::where('username', $request['username'])->first()
+            ?? Student::where('username', $request['username'])->first();
 
         if (!$user || !Hash::check($request['password'], $user->password)) {
             return new JsonResource(['message' => 'Wrong credentials']);
@@ -25,7 +25,32 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
-        return new JsonResource(['token' => $token]);
+        $userPermissions = $user->getAllPermissions()->pluck('name');
+
+        // Map permissions to route names
+        $permissionRoutesMap = [];
+
+        foreach ($userPermissions as $permissionName) {
+            $routes = collect(Route::getRoutes())
+                ->filter(function ($route) use ($permissionName) {
+                    return in_array("permission:$permissionName", $route->gatherMiddleware());
+                })
+                ->map(function ($route) {
+                    return '/' . ltrim($route->uri(), '/');
+                })
+                ->filter()
+                ->values();
+
+            $permissionRoutesMap[] = [
+                'permission' => $permissionName,
+                'routes' => $routes,
+            ];
+        }
+
+        return new JsonResource([
+            'token' => $token,
+            'permissions' => $permissionRoutesMap,
+        ]);
     }
 
     public function createUser(CreateUserRequest $request)
