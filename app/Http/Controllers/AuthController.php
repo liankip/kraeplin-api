@@ -32,23 +32,11 @@ class AuthController extends Controller
         $permissionRoutesMap = [];
 
         foreach ($userPermissions as $permissionName) {
-            $routes = collect(Route::getRoutes())
-                ->filter(function ($route) use ($permissionName) {
-                    return in_array("permission:$permissionName", $route->gatherMiddleware());
-                })
-                ->map(function ($route) {
-                    return '/' . ltrim($route->uri(), '/');
-                })
-                ->filter()
-                ->values();
-
-            $permissionRoutesMap[] = [
-                'permission' => $permissionName,
-                'routes' => $routes,
-            ];
+            $permissionRoutesMap[] = $permissionName;
         }
 
         return Response::json([
+            'username' => $user->username,
             'permissions' => $permissionRoutesMap,
         ])->withCookie(Cookie::make('token', $token, 60, null, false, false, true, ''));
     }
@@ -74,25 +62,38 @@ class AuthController extends Controller
         $permissionRoutesMap = [];
 
         foreach ($userPermissions as $permissionName) {
-            $routes = collect(Route::getRoutes())
-                ->filter(function ($route) use ($permissionName) {
-                    return in_array("permission:$permissionName", $route->gatherMiddleware());
-                })
-                ->map(function ($route) {
-                    return '/' . ltrim($route->uri(), '/');
-                })
-                ->filter()
-                ->values();
-
-            $permissionRoutesMap[] = [
-                'permission' => $permissionName,
-                'routes' => $routes,
-            ];
+            $permissionRoutesMap[] = $permissionName;
         }
 
         return new JsonResource([
             'username' => $user->username,
             'permissions' => $permissionRoutesMap,
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $rawToken = $request->cookie('token');
+
+        if (!$rawToken) {
+            return response()->json(['message' => 'Token cookie not found'], 401);
+        }
+
+        $token = PersonalAccessToken::findToken($rawToken);
+
+        if (!$token) {
+            return response()->json(['message' => 'Invalid token'], 401);
+        }
+
+        $user = $token->tokenable;
+
+        if ($user) {
+            $user->tokens()->where('id', $token->id)->delete();
+            Cookie::forget('token');
+        }
+
+        return new JsonResource([
+            'message' => 'Successfully logged out',
         ]);
     }
 
