@@ -90,7 +90,10 @@ class AuthController extends Controller
             ];
         }
 
-        return new JsonResource($permissionRoutesMap);
+        return new JsonResource([
+            'username' => $user->username,
+            'permissions' => $permissionRoutesMap,
+        ]);
     }
 
     public function createUser(CreateUserRequest $request)
