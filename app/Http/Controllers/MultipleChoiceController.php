@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateMultipleChoiceQuestionRequest;
 use App\Http\Requests\CreateMultipleChoiceRequest;
+use App\Http\Requests\CreateMultipleChoiceScheduleGroupRequest;
 use App\Http\Requests\CreateMultipleChoiceSchedulerRequest;
 use App\Http\Requests\UpdateMultipleChoiceQuestionRequest;
 use App\Http\Requests\UpdateMultipleChoiceRequest;
+use App\Http\Requests\UpdateMultipleChoiceScheduleGroupRequest;
 use App\Http\Requests\UpdateMultipleChoiceSchedulerRequest;
 use App\Models\MultipleChoice;
 use App\Models\MultipleChoiceQuestion;
@@ -196,6 +198,40 @@ class MultipleChoiceController extends Controller
 
     public function createMultipleChoiceSchedulerGroup(CreateMultipleChoiceScheduleGroupRequest $request): JsonResource
     {
+        $multipleChoiceScheduleGroup = MultipleChoiceScheduleGroup::create($request->validated());
 
+        return new JsonResource($multipleChoiceScheduleGroup);
+    }
+
+    public function updateMultipleChoiceSchedulerGroup(UpdateMultipleChoiceScheduleGroupRequest $request, $id): JsonResource
+    {
+        $multipleChoiceScheduleGroup = MultipleChoiceScheduleGroup::find($id);
+
+        if (!$multipleChoiceScheduleGroup) {
+            return new JsonResource([
+                'success' => false,
+                'message' => 'Multiple choice scheduler not found'
+            ]);
+        }
+
+        $multipleChoiceScheduleGroup->update($request->all());
+
+        return new JsonResource($multipleChoiceScheduleGroup);
+    }
+
+    public function deleteMultipleChoiceSchedulerGroup($id): JsonResource
+    {
+        $multipleChoiceScheduleGroup = MultipleChoiceScheduleGroup::find($id);
+
+        if (!$multipleChoiceScheduleGroup) {
+            return new JsonResource([
+                'success' => false,
+                'message' => 'Multiple choices schedule group not found'
+            ]);
+        }
+
+        $multipleChoiceScheduleGroup->delete();
+
+        return new JsonResource($multipleChoiceScheduleGroup);
     }
 }

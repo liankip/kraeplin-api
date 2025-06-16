@@ -11,6 +11,8 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('auth')->group(function () {
         Route::post('/', [AuthController::class, 'loginUsers'])->name('auth.login');
+
+        Route::get('/me',  [AuthController::class, 'me'])->name('auth.me');
     });
 
     Route::prefix('admin')->group(function () {
