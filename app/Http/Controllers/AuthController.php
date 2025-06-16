@@ -7,10 +7,11 @@ use App\Http\Requests\CreateUserRequest;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Cookie;
+
 
 class AuthController extends Controller
 {
@@ -27,7 +28,6 @@ class AuthController extends Controller
 
         $userPermissions = $user->getAllPermissions()->pluck('name');
 
-        // Map permissions to route names
         $permissionRoutesMap = [];
 
         foreach ($userPermissions as $permissionName) {
@@ -47,9 +47,9 @@ class AuthController extends Controller
             ];
         }
 
-        return response()->json([
-            'permissions' => $permissionRoutesMap,
-        ])->header('Set-Cookie', 'auth_token=' . $token);
+         return Response::json([
+             'permissions' => $permissionRoutesMap,
+         ])->withCookie(Cookie::make('token', $token, 60, null, false, true, true, '', 'Strict'));
     }
 
     public function createUser(CreateUserRequest $request)

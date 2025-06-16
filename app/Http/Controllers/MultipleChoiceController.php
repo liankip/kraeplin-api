@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateMultipleChoiceRequest;
 use App\Http\Requests\UpdateMultipleChoiceSchedulerRequest;
 use App\Models\MultipleChoice;
 use App\Models\MultipleChoiceQuestion;
+use App\Models\MultipleChoiceScheduleGroup;
 use App\Models\MultipleChoiceScheduler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -176,5 +177,25 @@ class MultipleChoiceController extends Controller
         $multipleChoiceScheduler->delete();
 
         return new JsonResource($multipleChoiceScheduler);
+    }
+
+    public function collectionMultipleChoiceSchedulerGroup(Request $request): JsonResource
+    {
+        $multipleChoiceScheduleGroup = MultipleChoiceScheduleGroup::filter($request, ['id_group', 'id_multiple_choice_scheduler'])
+            ->paginateRequest($request);
+
+        return new JsonResource($multipleChoiceScheduleGroup);
+    }
+
+    public function documentMultipleChoiceSchedulerGroup($id): JsonResource
+    {
+        $multipleChoiceScheduleGroup = MultipleChoiceScheduleGroup::find($id);
+
+        return new JsonResource($multipleChoiceScheduleGroup);
+    }
+
+    public function createMultipleChoiceSchedulerGroup(CreateMultipleChoiceScheduleGroupRequest $request): JsonResource
+    {
+
     }
 }
