@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         return Response::json([
             'permissions' => $permissionRoutesMap,
-        ])->withCookie(Cookie::make('token', $token, 60, null, false, true, true, '', 'Strict'));
+        ])->withCookie(Cookie::make('token', $token, 60, null, false, true, true, '', 'none'));
     }
 
     public function me(Request $request)
