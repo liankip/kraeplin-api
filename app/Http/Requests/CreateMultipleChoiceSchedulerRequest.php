@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateMultipleChoiceQuestionRequest extends FormRequest
+class CreateMultipleChoiceSchedulerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,7 @@ class CreateMultipleChoiceQuestionRequest extends FormRequest
     {
         return [
             'id_multiple_choice' => 'required|integer|exists:multiple_choices,id',
-            'question' => 'required|string',
-            'option_a' => 'required|string',
-            'option_b' => 'required|string',
-            'option_c' => 'required|string',
-            'option_d' => 'required|string',
-            'option_e' => 'required|string',
-            'answer' => 'required|string',
-            'score' => 'required|integer',
+            'date' => 'required|date_format:Y-m-d H:i:s',
         ];
     }
 

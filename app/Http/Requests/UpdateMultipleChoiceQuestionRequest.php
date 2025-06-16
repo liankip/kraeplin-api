@@ -23,6 +23,7 @@ class UpdateMultipleChoiceQuestionRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id_multiple_choice' => 'required|integer|exists:multiple_choices,id',
             'question' => 'required|string',
             'option_a' => 'required|string',
             'option_b' => 'required|string',

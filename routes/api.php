@@ -31,7 +31,7 @@ Route::prefix('v1')->group(function () {
                 Route::delete('/{id}', [GroupController::class, 'deleteGroup'])->middleware('permission:delete data')->name('group.group-delete');
             });
 
-            Route::prefix( 'kraeplin')->group(function () {
+            Route::prefix('kraeplin')->group(function () {
                 Route::get('/', [KraeplinController::class, 'collectionKraeplin'])->middleware('permission:view data')->name('kraeplin.kraeplin-collection');
                 Route::get('/{id}', [KraeplinController::class, 'documentKraeplin'])->middleware('permission:view data')->name('kraeplin.kraeplin-document');
                 Route::post('/', [KraeplinController::class, 'createKraeplin'])->middleware('permission:create data')->name('kraeplin.kraeplin-create');

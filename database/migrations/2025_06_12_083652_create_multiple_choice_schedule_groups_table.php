@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_group');
             $table->foreignId('id_multiple_choice_schedule');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

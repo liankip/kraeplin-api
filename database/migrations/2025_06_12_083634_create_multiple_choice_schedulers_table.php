@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_multiple_choice');
             $table->dateTime('date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateMultipleChoiceQuestionRequest;
 use App\Http\Requests\CreateMultipleChoiceRequest;
+use App\Http\Requests\CreateMultipleChoiceSchedulerRequest;
 use App\Http\Requests\UpdateMultipleChoiceQuestionRequest;
 use App\Http\Requests\UpdateMultipleChoiceRequest;
+use App\Http\Requests\UpdateMultipleChoiceSchedulerRequest;
 use App\Models\MultipleChoice;
 use App\Models\MultipleChoiceQuestion;
+use App\Models\MultipleChoiceScheduler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -119,5 +122,59 @@ class MultipleChoiceController extends Controller
         $multipleChoiceQuestion->delete();
 
         return new JsonResource($multipleChoiceQuestion);
+    }
+
+    public function collectionMultipleChoiceScheduler(Request $request): JsonResource
+    {
+        $multipleChoiceScheduler = MultipleChoiceScheduler::filter($request, ['date'])
+            ->paginateRequest($request);
+
+        return new JsonResource($multipleChoiceScheduler);
+    }
+
+    public function documentMultipleChoiceScheduler($id): JsonResource
+    {
+        $multipleChoiceScheduler = MultipleChoiceScheduler::find($id);
+
+        return new JsonResource($multipleChoiceScheduler);
+    }
+
+    public function createMultipleChoiceScheduler(CreateMultipleChoiceSchedulerRequest $request): JsonResource
+    {
+        $multipleChoiceScheduler = MultipleChoiceScheduler::create($request->validated());
+
+        return new JsonResource($multipleChoiceScheduler);
+    }
+
+    public function updateMultipleChoiceScheduler(UpdateMultipleChoiceSchedulerRequest $request, $id): JsonResource
+    {
+        $multipleChoiceScheduler = MultipleChoiceScheduler::find($id);
+
+        if (!$multipleChoiceScheduler) {
+            return new JsonResource([
+                'success' => false,
+                'message' => 'Multiple choice scheduler not found'
+            ]);
+        }
+
+        $multipleChoiceScheduler->update($request->all());
+
+        return new JsonResource($multipleChoiceScheduler);
+    }
+
+    public function deleteMultipleChoiceScheduler($id): JsonResource
+    {
+        $multipleChoiceScheduler = MultipleChoiceScheduler::find($id);
+
+        if (!$multipleChoiceScheduler) {
+            return new JsonResource([
+                'success' => false,
+                'message' => 'Multiple choices scheduler not found'
+            ]);
+        }
+
+        $multipleChoiceScheduler->delete();
+
+        return new JsonResource($multipleChoiceScheduler);
     }
 }

@@ -47,10 +47,9 @@ class AuthController extends Controller
             ];
         }
 
-        return new JsonResource([
-            'token' => $token,
+        return response()->json([
             'permissions' => $permissionRoutesMap,
-        ]);
+        ])->header('Set-Cookie', 'auth_token=' . $token);
     }
 
     public function createUser(CreateUserRequest $request)

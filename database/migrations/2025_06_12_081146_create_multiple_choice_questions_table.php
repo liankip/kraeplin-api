@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('multiple_choice_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id');
+            $table->foreignId('id_multiple_choice');
             $table->string('question', 100);
             $table->string('option_a', 100);
             $table->string('option_b', 100);
