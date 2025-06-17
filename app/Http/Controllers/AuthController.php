@@ -73,7 +73,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $rawToken = $request->cookie('token');
+        $rawToken = $request->query('token');
 
         if (!$rawToken) {
             return response()->json(['message' => 'Token cookie not found'], 401);
