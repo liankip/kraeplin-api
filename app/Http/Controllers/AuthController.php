@@ -9,9 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
@@ -38,18 +36,13 @@ class AuthController extends Controller
         return Response::json([
             'username' => $user->username,
             'permissions' => $permissionRoutesMap,
-        ])->withCookie(Cookie::make('token', $token, 60, null, false, false, true, ''));
+            'token' =>  $token,
+        ]);
     }
 
     public function me(Request $request)
     {
-        $rawToken = $request->cookie('token');
-
-        if (!$rawToken) {
-            return response()->json(['message' => 'Token cookie not found'], 401);
-        }
-
-        $token = PersonalAccessToken::findToken($rawToken);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
 
         if (!$token) {
             return response()->json(['message' => 'Invalid token'], 401);
@@ -73,13 +66,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $rawToken = $request->query('token');
-
-        if (!$rawToken) {
-            return response()->json(['message' => 'Token cookie not found'], 401);
-        }
-
-        $token = PersonalAccessToken::findToken($rawToken);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
 
         if (!$token) {
             return response()->json(['message' => 'Invalid token'], 401);
@@ -89,7 +76,6 @@ class AuthController extends Controller
 
         if ($user) {
             $user->tokens()->where('id', $token->id)->delete();
-            Cookie::forget('token');
         }
 
         return new JsonResource([

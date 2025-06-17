@@ -18,7 +18,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('admin')->group(function () {
-        Route::middleware(['auth:sanctum', 'role:admin|data-entry'])->group(function () {
+        Route::middleware(['auth:sanctum'])->group(function () {
             Route::prefix('student')->group(function () {
                 Route::get('/', [StudentController::class, 'collectionStudent'])->middleware('permission:student.collection')->name('student.collection');
                 Route::get('/{id}', [StudentController::class, 'documentStudent'])->middleware('permission:student.document')->name('student.document');
